@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: f8NzA8L51j8OHnOBUAen8bfKqfcB1Qs3rsEPVs1BIzYlITTvTGkivp/m14OKzYkn4o01eItmuGZcnHAdVbG4yA5liUE9vYTwpuRAGgrr4Yv0BjfzQ3MT6qkG1ZyMXomfkmBWEn90Uemj1QNfsUOHKrNkAbZsYNc/mQghJEY1z4WJfDsT5wup1dn+vxRMYS61G/eiaaULi8/E2uPLqSH0h5RtDrYbfFjEpsgVJtyZ11nKx3+FQK0R9KzKpVb12yE72QPlv0depz9rScOja6X3c7dQaERwJmoPJxLhGDjQ4vj/8heAkwc3RYbltoxnKA/5n+sJTytl+xhJl2gUTizYoSu/hrEk/TyD4Jg62Pz4Z80XTlDCxP/JWp1ePQuHhZEMUmQ3HyD4xews+oZGSG0G6FNn4VbtCmJ/vMBR1tAJK6nRQ06tpLENN0v68FGyW/W19ZlVoCVaihzLQS8PISYtJ09H+eL3u5FgEvephLR6Y24cXqYSHZUo/rq22QZBI41jmHm5qhEQT3I7LFDMF931UwkfbMpZmPfZyz9RPaHzL2uCmwzhkcraAEIMLfc4eqEmaCt530nyvlhY6/6sfQwJ1VPL6Y/bSwDeLps6oWPqPdXjmmQe/qBLVkIXyDUrZ5pdyi5LjP5oJVx/fKltBBPdX2PCiSKKbBuLyo/8DtejhrY=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/Essays-on-Mankind-and-Political-Arithmetic_5619
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
