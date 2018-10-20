@@ -1,5 +1,5 @@
 _repo: Essays-on-Mankind-and-Political-Arithmetic_5619
-_version: 0.2.0
+_version: 0.2.1
 contributor:
   author_of_introduction:
     agent_name: Morley, Henry
@@ -34,5 +34,6 @@ subjects:
 - !lcsh 'London (England) -- Population'
 - !lcsh 'Population'
 - !lcc 'HB'
+- GITenberg
 title: Essays on Mankind and Political Arithmetic
 url: http://www.gutenberg.org/ebooks/5619
